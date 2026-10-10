@@ -274,6 +274,14 @@ export function LearnFeed({ onStartQuiz, onView }: LearnFeedProps) {
                           {w.meanings[0]?.cn ?? ''}
                         </span>
                       </button>
+                      {/* 每个家族词都能直接点读：不用进详情页才知道怎么念。
+                          「发音按钮」是 <li> 的直接子元素（不嵌套在跳转按钮里），
+                          所以点喇叭只朗读，不会误触发跳转。 */}
+                      <SpeakButton
+                        text={w.word}
+                        label=""
+                        className="self-center !border-0 !px-1 !py-0.5 hover:!bg-transparent"
+                      />
                     </li>
                   ))}
                 </ol>
