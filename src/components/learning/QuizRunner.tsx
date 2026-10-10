@@ -4,12 +4,25 @@ import { Button } from '@/components/common/Button';
 import { SpeakButton } from '@/components/common/SpeakButton';
 import { useLearningStore } from '@/store/useLearningStore';
 import { getWordById, getFamilyWords } from '@/data';
-import type { QuizQuestion } from '@/lib/quiz';
+import type { QuizQuestion, QuizKind } from '@/lib/quiz';
 
 interface QuizRunnerProps {
   questions: QuizQuestion[];
   onExit: () => void;
 }
+
+/**
+ * 主动回忆的方向标签：让「识别 / 反向回忆 / 词缀 / 语境 / 辨析」一目了然。
+ * big=true 时题干文本短（词根、词、词缀），用大字号展示；
+ * big=false 时题干为长句或辨析导语，用段落样式展示。
+ */
+const KIND_META: Record<QuizKind, { tag: string; big: boolean }> = {
+  meaning: { tag: '识别 · 选释义', big: true },
+  word: { tag: '回忆 · 选词形', big: false },
+  affix: { tag: '词缀 · 选释义', big: true },
+  context: { tag: '语境 · 选释义', big: false },
+  distinguish: { tag: '辨析 · 挑词形', big: false },
+};
 
 /**
  * 按需测试（Quiz）
@@ -93,12 +106,22 @@ export function QuizRunner({ questions, onExit }: QuizRunnerProps) {
       </div>
 
       <Card key={q.itemId} className="animate-pop-in">
-        <div className="tag-edit">{q.type === 'root' ? '这个词根的意思是？' : '这个单词的意思是？'}</div>
-        <div className="mt-2 flex items-end justify-between gap-3">
-          <div className="word-huge text-[clamp(1.8rem,9vw,2.8rem)] text-text">{q.prompt}</div>
-          <SpeakButton text={q.prompt} className="mb-1" />
+        <div className="flex items-center justify-between gap-2">
+          <div className="tag-edit">{KIND_META[q.kind].tag}</div>
+          {q.sub && <div className="font-mono text-[11px] text-muted">{q.sub}</div>}
         </div>
-        {q.sub && <div className="mt-1 font-mono text-xs text-muted">{q.sub}</div>}
+        <div className="mt-2 flex items-end justify-between gap-3">
+          <div
+            className={
+              KIND_META[q.kind].big
+                ? 'word-huge text-[clamp(1.8rem,9vw,2.8rem)] text-text'
+                : 'min-w-0 text-base leading-relaxed text-text break-safe'
+            }
+          >
+            {q.prompt}
+          </div>
+          <SpeakButton text={q.prompt} className="mb-1 shrink-0" />
+        </div>
 
         <div className="rule-thick mt-3" />
 
