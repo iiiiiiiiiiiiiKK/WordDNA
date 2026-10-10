@@ -10,6 +10,7 @@ import { overallMastery } from '@/lib/mastery';
 import { getRoots, getRootById, getWordById, getWords, getFamilyWords } from '@/data';
 import { todayKey } from '@/lib/utils';
 import { ROUTES as PATHS } from '@/lib/routes';
+import { buildDailyQueue } from '@/lib/queue';
 import { BRAND } from '@/lib/brand';
 import type { Root } from '@/types/domain';
 
@@ -45,6 +46,25 @@ export function Dashboard() {
   const dailyLogs = useSettingsStore((s) => s.dailyLogs);
   const getStreak = useSettingsStore((s) => s.getStreak);
   const mistakes = useCollectionStore((s) => s.mistakes);
+  const lastFeedRootId = useLearningStore((s) => s.lastFeedRootId);
+
+  // 今日计划：用已有的每日队列算法算出「新学 / 复习」配额，正面回答「今天该学什么」。
+  const today = useMemo(
+    () => buildDailyQueue({ now: new Date(), plan: settings.plan, states }),
+    [states, settings.plan],
+  );
+  // 中断恢复：有过学习记录且距今天 >= 1 天 → 无负罪感回归，不显示「连续中断」。
+  const lastStudyDate = useMemo(() => {
+    if (dailyLogs.length === 0) return null;
+    return [...dailyLogs].map((l) => l.date).sort().at(-1) ?? null;
+  }, [dailyLogs]);
+  const gapDays = useMemo(() => {
+    if (!lastStudyDate) return 0;
+    const a = Date.parse(lastStudyDate + 'T00:00:00');
+    const b = Date.parse(todayKey() + 'T00:00:00');
+    return Math.max(0, Math.round((b - a) / 86_400_000));
+  }, [lastStudyDate]);
+  const showWelcomeBack = lastStudyDate !== null && gapDays >= 1;
 
   const pct = Math.round(overallMastery(states) * 100);
   const streak = getStreak();
@@ -168,6 +188,58 @@ export function Dashboard() {
           </p>
         </section>
 
+        {showWelcomeBack && (
+          <section className="mt-5 rounded-2xl border-2 border-ink bg-surface-2 p-4">
+            <div className="tag-edit">WELCOME BACK</div>
+            <p className="mt-2 text-sm font-semibold text-text">很高兴你回来了。</p>
+            <p className="mt-1 text-xs text-muted">
+              你已 {gapDays} 天没学习，不用补完所有内容。今天先学 5 分钟。
+            </p>
+            <Button block className="mt-3" onClick={() => navigate(PATHS.study)}>
+              重新开始
+            </Button>
+          </section>
+        )}
+
+        {/* ── 今日学习：首页唯一要回答的问题「今天该学什么」 ── */}
+        <section className="mt-5">
+          <div className="flex items-baseline justify-between">
+            <span className="word-huge text-[clamp(2rem,10vw,3rem)] text-text">TODAY</span>
+            <span className="tag-edit">{todayKey().slice(5).replace('-', '/')}</span>
+          </div>
+          <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+            <div>
+              <div className="font-display text-2xl font-black leading-none text-text">{today.newCount}</div>
+              <div className="tag-edit mt-1">NEW</div>
+            </div>
+            <div>
+              <div className="font-display text-2xl font-black leading-none text-text">{today.reviewCount}</div>
+              <div className="tag-edit mt-1">REVIEW</div>
+            </div>
+            <div>
+              <div className="font-display text-2xl font-black leading-none text-text">{settings.plan}</div>
+              <div className="tag-edit mt-1">MIN</div>
+            </div>
+          </div>
+          <Button block className="mt-3" onClick={() => navigate(PATHS.study)}>
+            {BRAND.cta}
+            <Icon name="arrow-right" size={18} />
+          </Button>
+          {lastFeedRootId &&
+            (() => {
+              const r = getRootById(lastFeedRootId);
+              return r ? (
+                <button
+                  onClick={() => navigate(PATHS.rootFamily(r.id))}
+                  className="mt-2 flex w-full items-center justify-between border-b-2 border-ink py-2 text-left"
+                >
+                  <span className="tag-edit">继续上次学习</span>
+                  <span className="font-display text-sm font-bold tracking-tight text-text">{r.root}</span>
+                </button>
+              ) : null;
+            })()}
+        </section>
+
         <div className="rule mt-5" />
 
         {/* ── 今日词根 ── */}
@@ -252,14 +324,9 @@ export function Dashboard() {
           </button>
         )}
 
-        {/* ── 唯一主行动 ── */}
+        {/* ── 快捷入口（主行动已放在 TODAY 卡片，这里只做分流） ── */}
         <section className="mt-6">
-          <Button size="lg" block onClick={() => navigate(PATHS.study)}>
-            {BRAND.cta}
-            <Icon name="arrow-right" size={18} />
-          </Button>
-
-          <div className="mt-3 grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <Button size="sm" variant="outline" onClick={() => navigate(PATHS.split)}>
               拆词
             </Button>

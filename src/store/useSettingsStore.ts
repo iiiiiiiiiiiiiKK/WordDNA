@@ -16,6 +16,8 @@ const DEFAULT_SETTINGS: Settings = {
   dailyNewTarget: 5,
   dailyReviewTarget: 10,
   splitMode: 'learn',
+  level: undefined,
+  goal: undefined,
 };
 
 interface SettingsStore {
@@ -26,7 +28,7 @@ interface SettingsStore {
   setPlan: (p: PlanMinutes) => Promise<void>;
   setTheme: (t: ThemeMode) => Promise<void>;
   setSplitMode: (m: Settings['splitMode']) => Promise<void>;
-  completeOnboarding: (p: PlanMinutes) => Promise<void>;
+  completeOnboarding: (p: PlanMinutes, extra?: { level?: Settings['level']; goal?: Settings['goal'] }) => Promise<void>;
   logDay: (entry: Partial<DailyLog>) => Promise<void>;
   getStreak: (today?: Date) => number;
   exportData: () => Promise<string>;
@@ -70,7 +72,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     await db.put('settings', 'app', settings);
   },
 
-  async completeOnboarding(p) {
+  async completeOnboarding(p, extra) {
     const { newTarget, reviewTarget } = planTargets(p);
     const settings: Settings = {
       ...get().settings,
@@ -78,6 +80,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       dailyNewTarget: newTarget,
       dailyReviewTarget: reviewTarget,
       onboardingDone: true,
+      level: extra?.level ?? get().settings.level,
+      goal: extra?.goal ?? get().settings.goal,
     };
     set({ settings });
     await db.put('settings', 'app', settings);

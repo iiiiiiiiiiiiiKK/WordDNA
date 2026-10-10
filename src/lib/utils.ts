@@ -57,12 +57,16 @@ export function levenshtein(a: string, b: string): number {
 
 export function planTargets(plan: PlanMinutes): { newTarget: number; reviewTarget: number } {
   switch (plan) {
+    case 5:
+      return { newTarget: 3, reviewTarget: 5 };
     case 10:
       return { newTarget: 5, reviewTarget: 10 };
     case 20:
       return { newTarget: 10, reviewTarget: 20 };
     case 30:
       return { newTarget: 15, reviewTarget: 30 };
+    default:
+      return { newTarget: 5, reviewTarget: 10 };
   }
 }
 

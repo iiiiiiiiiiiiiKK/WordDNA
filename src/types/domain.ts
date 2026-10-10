@@ -10,7 +10,7 @@ export type SrsStatus = 'new' | 'learning' | 'review' | 'mastered';
 export type Rating = 'again' | 'hard' | 'good' | 'easy';
 export type Reliability = 'etymological' | 'morphological' | 'mnemonic';
 export type ThemeMode = 'light' | 'dark' | 'system';
-export type PlanMinutes = 10 | 20 | 30;
+export type PlanMinutes = 5 | 10 | 20 | 30;
 export type ExamLevel =
   | 'CET-4'
   | 'CET-6'
@@ -124,12 +124,16 @@ export interface StudySession {
 
 // ---------- 设置 / 收藏 ----------
 export interface Settings {
-  plan: PlanMinutes; // 10 | 20 | 30
+  plan: PlanMinutes; // 5 | 10 | 20 | 30
   theme: ThemeMode;
   onboardingDone: boolean;
-  dailyNewTarget: number; // 由 plan 推导：5/10/15
-  dailyReviewTarget: number; // 10/20/30
+  dailyNewTarget: number; // 由 plan 推导：3/5/10/15
+  dailyReviewTarget: number; // 5/10/20/30
   splitMode: 'learn' | 'etymology'; // 拆词页默认视图
+  /** 首次诊断测得的英语基础：weak | mid | strong（用于初始学习画像） */
+  level?: 'weak' | 'mid' | 'strong';
+  /** 学习目标：daily / reading / work / tech / exam / overall */
+  goal?: 'daily' | 'reading' | 'work' | 'tech' | 'exam' | 'overall';
 }
 export type FavoriteKind = 'word' | 'root' | 'family' | 'mistake' | 'note';
 export interface Favorite {

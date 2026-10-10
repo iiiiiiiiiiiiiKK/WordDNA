@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { PageContainer } from '@/components/layout/PageContainer';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
@@ -13,6 +14,7 @@ const THEMES: { value: ThemeMode; label: string }[] = [
 ];
 
 const PLANS: { value: PlanMinutes; label: string; desc: string }[] = [
+  { value: 5, label: '5 分钟', desc: '新 3 · 复习 5' },
   { value: 10, label: '10 分钟', desc: '新 5 · 复习 10' },
   { value: 20, label: '20 分钟', desc: '新 10 · 复习 20' },
   { value: 30, label: '30 分钟', desc: '新 15 · 复习 30' },
@@ -23,6 +25,31 @@ export function Settings() {
   const setTheme = useSettingsStore((s) => s.setTheme);
   const setPlan = useSettingsStore((s) => s.setPlan);
   const setSplitMode = useSettingsStore((s) => s.setSplitMode);
+  const exportData = useSettingsStore((s) => s.exportData);
+  const importData = useSettingsStore((s) => s.importData);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [importMsg, setImportMsg] = useState<string>('');
+
+  const handleExport = async () => {
+    const json = await exportData();
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `worddna-data-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (file: File) => {
+    try {
+      const text = await file.text();
+      await importData(text);
+      setImportMsg('导入成功，数据已恢复。');
+    } catch {
+      setImportMsg('导入失败：文件格式不正确。');
+    }
+  };
 
   return (
     <PageContainer title="设置" subtitle="个性化你的学习体验">
@@ -47,7 +74,7 @@ export function Settings() {
 
         <Card>
           <h3 className="mb-3 text-sm font-semibold text-text">每日学习计划</h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {PLANS.map((p) => (
               <button
                 key={p.value}
@@ -62,6 +89,33 @@ export function Settings() {
               </button>
             ))}
           </div>
+        </Card>
+
+        <Card>
+          <h3 className="mb-2 text-sm font-semibold text-text">数据备份</h3>
+          <p className="text-xs text-muted">
+            学习进度、SRS、收藏、错题、设置都可导出为 JSON 备份，换设备或误删时可导入恢复。
+          </p>
+          <div className="mt-3 flex gap-2">
+            <Button variant="outline" size="sm" onClick={handleExport}>
+              导出数据
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => fileRef.current?.click()}>
+              导入数据
+            </Button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void handleImport(f);
+                e.target.value = '';
+              }}
+            />
+          </div>
+          {importMsg && <p className="mt-2 text-xs text-accent-2">{importMsg}</p>}
         </Card>
 
         <Card>
