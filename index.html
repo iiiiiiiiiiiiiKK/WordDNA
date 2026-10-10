@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- 顶栏（系统 UI）配色与 App 的 Paper 米黄一致：安卓/桌面靠 theme-color，
+         iOS「添加到主屏幕」后靠 manifest 的 status_bar（theme-color 在 iOS 被忽略）。 -->
+    <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0e0c" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="WordDNA 单词DNA — 拆开一个单词，记住一整个词族。" />
+    <link id="app-manifest" rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="WordDNA" />
+    <title>WordDNA · 单词DNA</title>
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('wd:themeMode');
+          var mode = raw ? JSON.parse(raw) : 'system';
+          if (mode === undefined) mode = 'system';
+          var resolved =
+            mode === 'system'
+              ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light'
+              : mode;
+          if (resolved === 'dark') document.documentElement.classList.add('dark');
+        } catch (e) {
+          /* noop */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "name": "WordDNA · 单词DNA",
+  "short_name": "WordDNA",
+  "description": "拆开一个单词，记住一整个词族。词根词缀驱动的英语记忆学习平台。",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F2EA",
+  "theme_color": "#F5F2EA",
+  "lang": "zh-CN",
+  "categories": ["education", "productivity"],
+  "status_bar": {
+    "background_color": "#F5F2EA",
+    "style": "dark"
+  },
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

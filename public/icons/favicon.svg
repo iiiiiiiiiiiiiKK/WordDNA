@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="96" fill="#4F46E5" />
+  <g font-family="-apple-system, Segoe UI, Inter, sans-serif" font-weight="700" text-anchor="middle">
+    <text x="256" y="205" font-size="150" fill="#ffffff">W</text>
+    <rect x="150" y="240" width="212" height="56" rx="28" fill="#818CF8" />
+    <rect x="190" y="316" width="132" height="56" rx="28" fill="#38BDF8" />
+    <rect x="222" y="392" width="68" height="56" rx="28" fill="#34D399" />
+  </g>
+</svg>

@@ -1,0 +1,300 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   WordDNA 语义化配色 Token（唯一真源）
+   Light 在 :root，Dark 在 .dark 覆盖
+   ============================================================ */
+/* ---- Rootly 品牌色板（方案 A 编辑部 × 方案 D 交互解剖） ----
+   Paper #F5F2EA / Ink #171717 / Acid #C8FF3D / Flame #F06432 */
+:root {
+  --bg: #f5f2ea;
+  --surface: #ffffff;
+  --surface-2: #ede9de;
+  --text: #171717;
+  --text-muted: #77756f;
+  --border: #252525;
+
+  --accent: #c8ff3d; /* 荧光黄绿：唯一高亮 */
+  --accent-2: #f06432; /* 橙红：次级强调 */
+  --on-accent: #171717; /* 叠在荧光绿上的前景色：恒为墨黑，保证两种主题都可读 */
+
+  /* 硬对比成对前景/背景（brutalist 反色按钮） */
+  --ink: #171717;
+  --paper: #f5f2ea;
+  --btn-bg: #171717;
+  --btn-fg: #f5f2ea;
+
+  --color-root: #171717;
+  --color-prefix: #f06432;
+  --color-suffix: #77756f;
+  --color-word: #374151;
+
+  --color-danger: #b91c1c;
+  --color-success: #15803d;
+  --color-warn: #b45309;
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0e0e0c;
+  --surface: #171715;
+  --surface-2: #212120;
+  --text: #f5f2ea;
+  --text-muted: #8a877e;
+  --border: #3a3a36;
+
+  --accent: #c8ff3d;
+  --accent-2: #f06432;
+  --on-accent: #171717;
+
+  /* 深色下反色：荧光绿按钮 + 墨黑字 */
+  --ink: #f5f2ea;
+  --paper: #171717;
+  --btn-bg: #c8ff3d;
+  --btn-fg: #171717;
+
+  --color-root: #c8ff3d;
+  --color-prefix: #f06432;
+  --color-suffix: #8a877e;
+  --color-word: #c9c5bc;
+
+  --color-danger: #f87171;
+  --color-success: #4ade80;
+  --color-warn: #fbbf24;
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   全局 reset
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+svg {
+  display: block;
+}
+
+/* 禁止横向滚动：长单词 / 长释义一律换行 */
+.break-safe {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+}
+
+/* 滚动条（桌面） */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+  background-clip: padding-box;
+}
+
+/* 焦点可见性 */
+:focus-visible {
+  outline: 2px solid var(--color-root);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* 减少动效 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* 3D 翻转卡片 */
+.flip-scene {
+  perspective: 1200px;
+}
+.flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-face--back {
+  transform: rotateY(180deg);
+}
+
+/* 安全区（iOS 底部 Tab） */
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+}
+.h-safe-bottom {
+  height: env(safe-area-inset-bottom, 0px);
+}
+
+/* ============================================================
+   Rootly 编辑部 / Neo-Brutalism 表现层工具
+   ============================================================ */
+
+/* 硬阴影（替代柔和投影） */
+.shadow-hard {
+  box-shadow: 4px 4px 0 0 var(--ink);
+}
+.shadow-hard-sm {
+  box-shadow: 3px 3px 0 0 var(--ink);
+}
+.shadow-hard-lg {
+  box-shadow: 6px 6px 0 0 var(--ink);
+}
+.shadow-hard:active,
+.shadow-hard-sm:active,
+.shadow-hard-lg:active {
+  box-shadow: 0 0 0 0 var(--ink);
+  transform: translate(3px, 3px);
+}
+
+/* 编辑式细线 / 粗线分隔 */
+.rule {
+  height: 1px;
+  background: var(--border);
+  opacity: 0.35;
+}
+.rule-thick {
+  height: 3px;
+  background: var(--ink);
+}
+
+/* 巨大的英文单词：产品核心视觉资产
+   ⚠️ 不做 text-transform: uppercase——词根/单词必须保持原本大小写才便于学习记忆
+   （首页品牌标语本身在 BRAND.headline 里就是大写字面量，不受影响） */
+.word-huge {
+  font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.86;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* 编辑式小型标签：英文编号 + 说明 */
+.tag-edit {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* 高亮标记（荧光黄绿马克笔） */
+.mark-acid {
+  background: var(--accent);
+  color: #171717;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* 词根图谱原本用 .lab-dark 纯黑板做「实验室」节奏差，但它会覆盖 --color-root 等变量，
+   导致面板里用 bg-root/text-onaccent 的按钮变成「黑底黑字/绿底白字」看不清，
+   也和米黄纸主题反差过大。已改为同色系的标本台（bg-surface-2 + 墨黑粗边），此规则删除。
+   教训：局部面板不要覆盖语义色变量，否则下游组件的前后景配对全部失效。 */
+
+/* 单词解剖：粗描边分块（PREFIX / ROOT / SUFFIX） */
+.anatomy-chunk {
+  border: 3px solid var(--ink);
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease,
+    background-color 0.18s ease;
+}
+.anatomy-chunk:active {
+  transform: scale(0.97);
+}
+.anatomy-dim {
+  opacity: 0.28;
+}

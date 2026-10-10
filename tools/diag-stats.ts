@@ -1,0 +1,20 @@
+import { getRoots, getWords } from '@/data';
+import ecdictMini from '@/data/ecdictMini.json';
+import examBooks from '@/data/examBooks.json';
+import phonetics from '@/data/cigenPhonetics.json';
+
+const roots = getRoots();
+const words = getWords();
+console.log('roots', roots.length);
+console.log('words', words.length);
+console.log('total family refs', roots.reduce((n, r) => n + r.words.length, 0));
+console.log('words with examples', words.filter((w) => w.examples.length > 0).length);
+console.log('words with phonetic', words.filter((w) => !!w.phonetic).length);
+console.log('ecdictMini', (ecdictMini as unknown[]).length);
+console.log('phonetics json', Object.keys(phonetics as object).length);
+const books = examBooks as unknown as { categories?: unknown[] };
+console.log('examBooks keys', Object.keys(examBooks as object));
+if (books.categories) console.log('categories', books.categories.length);
+const langs: Record<string, number> = {};
+for (const r of roots) langs[r.language || 'root'] = (langs[r.language || 'root'] ?? 0) + 1;
+console.log('languages', JSON.stringify(langs));

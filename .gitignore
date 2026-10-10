@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+coverage
+*.log
+.env
+.env.*
+!.env.example
+
+# 原始数据体量过大（100MB+），不入库；构建产物已内联到 src/data/
+data_sources/
