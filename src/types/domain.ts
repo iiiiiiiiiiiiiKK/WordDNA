@@ -9,6 +9,8 @@ export type LearnItemType = 'root' | 'word' | 'prefix' | 'suffix';
 export type SrsStatus = 'new' | 'learning' | 'review' | 'mastered';
 export type Rating = 'again' | 'hard' | 'good' | 'easy';
 export type Reliability = 'etymological' | 'morphological' | 'mnemonic';
+// 数据校验状态：verified=词源/词典可考；synthetic=自研推导（如部分词缀）；review=待人工核验
+export type VerificationStatus = 'verified' | 'synthetic' | 'review';
 export type ThemeMode = 'light' | 'dark' | 'system';
 export type PlanMinutes = 5 | 10 | 20 | 30;
 export type ExamLevel =
@@ -41,6 +43,7 @@ export interface Morpheme {
   variants?: string[]; // ['port','porta'] 异体
   language?: string; // 'Latin'
   etymology?: string;
+  verificationStatus?: VerificationStatus;
 }
 
 // ---------- 词根 ----------
@@ -52,6 +55,7 @@ export interface Root {
   etymology: string;
   description: string; // 记忆提示
   words: string[]; // Word id 列表（词族）
+  verificationStatus?: VerificationStatus;
 }
 
 // ---------- 单词 ----------
