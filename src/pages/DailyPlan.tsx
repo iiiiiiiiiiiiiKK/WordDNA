@@ -373,10 +373,18 @@ function RootUnderstand({ root, family }: { root: Root; family: ReturnType<typeo
       </p>
       {family.length > 0 && (
         <ul className="mt-3 border-t-2 border-ink">
-          {family.slice(0, 6).map((w) => (
-            <li key={w.id} className="flex items-baseline gap-2 border-b border-border/50 py-1.5">
+          {family.slice(0, 8).map((w) => (
+            <li key={w.id} className="flex items-center gap-2 border-b border-border/50 py-1.5">
               <span className="font-display text-sm font-bold tracking-tight text-text">{w.word}</span>
+              {w.phonetic && (
+                <span className="shrink-0 font-mono text-[11px] text-accent-2">{w.phonetic}</span>
+              )}
               <span className="ml-auto truncate text-xs text-muted">{w.meanings[0]?.cn ?? ''}</span>
+              <SpeakButton
+                text={w.word}
+                label=""
+                className="self-center !border-0 !px-1 !py-0.5 hover:!bg-transparent"
+              />
             </li>
           ))}
         </ul>
