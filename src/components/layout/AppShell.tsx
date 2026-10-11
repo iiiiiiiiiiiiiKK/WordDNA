@@ -15,7 +15,9 @@ export function AppShell() {
       <div className="h-full flex">
         <Sidebar />
         <main data-app-scroll className="flex-1 min-w-0 overflow-y-auto">
-          <div className="mx-auto max-w-5xl px-8 py-8">
+          {/* 正文宽度分档：常规桌面 1024；超宽屏（30 寸 / 2560+）放宽到 1240，
+              否则大屏上内容夹在正中间、两侧各空出 ~500px，显得很浪费。 */}
+          <div className="mx-auto w-full max-w-5xl px-8 py-8 2xl:max-w-[1240px]">
             <Outlet />
           </div>
         </main>
