@@ -24,6 +24,14 @@
   <b>作者：</b> <a href="https://x.com/0xkillcoin"><b>𝕏 @oAdam</b></a> &nbsp;·&nbsp; <b>VOL.001 · ROOT LAB</b>
 </p>
 
+<p>
+  <a href="https://WordDNA.321.market/"><img src="https://img.shields.io/badge/🌐%20在线体验-WordDNA.321.market-C8FF3D?style=for-the-badge&logo=githubpages&logoColor=0e0e0c" alt="在线体验"></a>
+</p>
+
+<p>
+  <b>🌐 在线体验（无需安装，PWA 可装到主屏）：</b> <a href="https://WordDNA.321.market/"><b>https://WordDNA.321.market/</b></a>
+</p>
+
 </div>
 
 ---
