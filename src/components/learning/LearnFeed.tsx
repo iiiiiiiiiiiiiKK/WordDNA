@@ -226,51 +226,57 @@ export function LearnFeed({ onStartQuiz, onView }: LearnFeedProps) {
 
           {/* 巨型词根 + 发音 */}
           <div className="mt-2 flex items-end justify-between gap-3">
-            <div className="word-huge text-[clamp(2.4rem,12vw,3.6rem)] text-text">
+            {/* clamp 上限只有 3.6rem=57.6px：手机上够醒目，但桌面正文列宽 960–1176px，
+                同样 57.6px 放进去就显得小、四周留白。桌面起抬到 5rem(80px)，2xl 再大一点。 */}
+            <div className="word-huge text-[clamp(2.4rem,12vw,3.6rem)] text-text desk:text-[5rem] 2xl:text-[5.5rem]">
               {root.root}
             </div>
             <SpeakButton text={root.root} className="mb-1" />
           </div>
-          <div className="mt-1 font-mono text-base text-accent-2">{root.meaning}</div>
+          <div className="mt-1 font-mono text-base text-accent-2 desk:text-lg">{root.meaning}</div>
 
           {root.description && (
-            <p className="mt-2 text-xs leading-relaxed text-muted">{root.description}</p>
+            <p className="mt-2 text-xs leading-relaxed text-muted desk:text-sm">
+              {root.description}
+            </p>
           )}
 
           {/* 词族：一个词根带出一批单词 */}
           {family.length > 0 && (
             <>
               <div className="rule-thick mt-3" />
-              {/* 家族词：行高压紧后默认露出 8 行，更多则上下滑动（全部渲染，不会丢失）。
-                  每行 = 单词 + 音标 + 释义，字号与行高都压紧，不挤占底部例句空间。 */}
-              <div className="mt-2 max-h-52 overflow-y-auto pr-1">
-                <ol>
+              {/* 家族词：手机构型下与以前完全一致——行高压紧、最多露出 8 行（208px）。
+                  桌面列宽近千像素时那 208px 会变成「又宽又矮」的空条，所以从 desk 起
+                  抬高到 26rem(416px)；2xl 再拆成两列填满宽度（grid 按 DOM 顺序填充，
+                  序号仍是 1..N 从左到右，不会像 CSS 多列那样串行）。 */}
+              <div className="mt-2 max-h-52 overflow-y-auto pr-1 desk:max-h-[26rem]">
+                <ol className="2xl:grid 2xl:grid-cols-2 2xl:gap-x-6">
                   {family.map((w, i) => (
                     <li
                       key={w.id}
                       ref={w.id === focusWord ? focusWordRef : undefined}
                       className={
-                        'flex items-baseline gap-1.5 border-b border-border/40 py-[3px] ' +
+                        'flex items-baseline gap-1.5 border-b border-border/40 py-[3px] desk:py-1.5 ' +
                         (w.id === focusWord ? 'bg-accent/25' : '')
                       }
                     >
-                      <span className="tag-edit w-5 shrink-0 text-[9px] leading-4">
+                      <span className="tag-edit w-5 shrink-0 text-[9px] leading-4 desk:w-6 desk:text-[10px]">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <button
                         onClick={() => navigate(ROUTES.wordDetail(w.id))}
                         className="flex min-w-0 flex-1 items-baseline gap-1.5 text-left"
                       >
-                        <span className="shrink-0 font-display text-xs font-bold leading-4 tracking-tight text-text">
+                        <span className="shrink-0 font-display text-xs font-bold leading-4 tracking-tight text-text desk:text-base desk:leading-6">
                           {w.word}
                         </span>
                         {/* 音标：不点进去也知道怎么读 */}
                         {w.phonetic && (
-                          <span className="shrink-0 font-mono text-[10px] leading-4 text-accent-2">
+                          <span className="shrink-0 font-mono text-[10px] leading-4 text-accent-2 desk:text-xs desk:leading-6">
                             {fmtPhonetic(w.phonetic)}
                           </span>
                         )}
-                        <span className="min-w-0 flex-1 truncate text-[11px] leading-4 text-muted">
+                        <span className="min-w-0 flex-1 truncate text-[11px] leading-4 text-muted desk:text-[13px] desk:leading-6">
                           {w.meanings[0]?.cn ?? ''}
                         </span>
                       </button>
@@ -300,14 +306,16 @@ export function LearnFeed({ onStartQuiz, onView }: LearnFeedProps) {
                 <div className="mt-3 border-2 border-ink bg-surface-2 p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="text-sm font-semibold leading-snug text-text break-safe">
+                      <div className="text-sm font-semibold leading-snug text-text break-safe desk:text-base">
                         {example.en}
                       </div>
-                      <div className="mt-1 text-xs text-muted break-safe">{example.cn}</div>
+                      <div className="mt-1 text-xs text-muted break-safe desk:text-sm">
+                        {example.cn}
+                      </div>
                     </div>
                     <SpeakButton text={example.en} />
                   </div>
-                  <div className="mt-2 font-display text-xs font-bold tracking-tight text-accent-2">
+                  <div className="mt-2 font-display text-xs font-bold tracking-tight text-accent-2 desk:text-sm">
                     — {exampleWord.word}
                   </div>
                 </div>

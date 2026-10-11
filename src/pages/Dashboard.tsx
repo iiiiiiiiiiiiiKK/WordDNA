@@ -157,14 +157,15 @@ export function Dashboard() {
       <div>
         {/* ── 巨型英文标题：单词本身即视觉主体（品牌名已在顶栏，此处不重复） ── */}
         <section className="mt-5">
-          <h1 className="word-huge text-[clamp(2.4rem,12vw,4rem)] text-text">
+          {/* desk: (≥1280) 之前 clamp 上限 4rem=64px 在宽列里偏小，桌面抬到 5rem(80px) */}
+          <h1 className="word-huge text-[clamp(2.4rem,12vw,4rem)] text-text desk:text-[5rem]">
             {BRAND.headline.map((line) => (
               <span key={line} className="block">
                 {line}
               </span>
             ))}
           </h1>
-          <p className="word-huge mt-1 text-[clamp(1.3rem,6.5vw,2.1rem)] text-accent-2">
+          <p className="word-huge mt-1 text-[clamp(1.3rem,6.5vw,2.1rem)] text-accent-2 desk:text-[2.6rem]">
             {BRAND.headlineAlt.map((line) => (
               <span key={line} className="block">
                 {line}
@@ -204,7 +205,9 @@ export function Dashboard() {
         {/* ── 今日学习：首页唯一要回答的问题「今天该学什么」 ── */}
         <section className="mt-5">
           <div className="flex items-baseline justify-between">
-            <span className="word-huge text-[clamp(2rem,10vw,3rem)] text-text">TODAY</span>
+            <span className="word-huge text-[clamp(2rem,10vw,3rem)] text-text desk:text-[3.5rem]">
+              TODAY
+            </span>
             <span className="tag-edit">{todayKey().slice(5).replace('-', '/')}</span>
           </div>
           <div className="mt-3 grid grid-cols-3 gap-2 text-center">
@@ -261,7 +264,7 @@ export function Dashboard() {
               onClick={() => navigate(PATHS.rootFamily(todayRoot.id))}
               className="mt-2 block w-full text-left"
             >
-              <span className="word-huge block text-[clamp(2rem,10vw,3rem)] text-text">
+              <span className="word-huge block text-[clamp(2rem,10vw,3rem)] text-text desk:text-[3.5rem]">
                 {todayRoot.root}
               </span>
               <span className="mt-1 block font-mono text-sm text-accent-2">
@@ -430,7 +433,9 @@ export function Dashboard() {
 function EditorialStat({ label, value }: { label: string; value: number | string }) {
   return (
     <div>
-      <div className="font-display text-lg font-black leading-none text-text">{value}</div>
+      <div className="font-display text-lg font-black leading-none text-text desk:text-xl">
+        {value}
+      </div>
       <div className="tag-edit mt-1">{label}</div>
     </div>
   );
