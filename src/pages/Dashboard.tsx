@@ -221,10 +221,16 @@ export function Dashboard() {
               <div className="tag-edit mt-1">MIN</div>
             </div>
           </div>
-          <Button block className="mt-3" onClick={() => navigate(PATHS.study)}>
-            {BRAND.cta}
+          <Button block className="mt-3" onClick={() => navigate(PATHS.plan)}>
+            开始今日计划
             <Icon name="arrow-right" size={18} />
           </Button>
+          <button
+            onClick={() => navigate(PATHS.study)}
+            className="mt-2 block w-full text-center text-xs text-muted"
+          >
+            不想按计划？自由滑动浏览 →
+          </button>
           {lastFeedRootId &&
             (() => {
               const r = getRootById(lastFeedRootId);

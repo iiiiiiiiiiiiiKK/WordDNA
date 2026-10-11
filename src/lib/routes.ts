@@ -4,6 +4,7 @@
 export const ROUTES = {
   dashboard: '/',
   study: '/study',
+  plan: '/plan',
   split: '/split',
   roots: '/roots',
   rootFamily: (rootId: string) => `/roots/${rootId}`,

@@ -113,7 +113,7 @@ export interface StudyItem {
 }
 export interface StudySession {
   id: string;
-  mode: 'root' | 'review' | 'challenge';
+  mode: 'root' | 'review' | 'challenge' | 'plan';
   queue: StudyItem[];
   cursor: number;
   startedAt: string;

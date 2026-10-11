@@ -4,6 +4,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { SearchPanel } from '@/components/search/SearchPanel';
 import { Dashboard } from '@/pages/Dashboard';
 import { Study } from '@/pages/Study';
+import { DailyPlan } from '@/pages/DailyPlan';
 import { Split } from '@/pages/Split';
 import { Roots } from '@/pages/Roots';
 import { RootFamily } from '@/pages/RootFamily';
@@ -198,6 +199,7 @@ export function App() {
         <Route element={<AppShell />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/study" element={<Study />} />
+          <Route path="/plan" element={<DailyPlan />} />
           <Route path="/split" element={<Split />} />
           <Route path="/roots" element={<Roots />} />
           <Route path="/roots/:rootId" element={<RootFamily />} />
