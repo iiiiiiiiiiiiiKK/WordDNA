@@ -1,0 +1,65 @@
+# ============================================================
+# WordDNA · GitHub Pages 自动部署
+# ------------------------------------------------------------
+# 触发：推送到 main 分支，或手动 workflow_dispatch。
+# 构建产物用「相对 base（./）」，因此同时兼容：
+#   1) 项目子路径  https://iiiiiiiiiiiiiKK.github.io/WordDNA/
+#   2) 自定义域名根路径  https://WordDNA.321.market/
+# SPA 回退：把构建后的 index.html 复制为 404.html，
+#   用户直接访问 /plan 等深链并刷新时仍由前端路由接管。
+# ============================================================
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 赋予 Pages 部署所需的权限（OIDC）
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只允许一个部署，避免并发覆盖
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: SPA fallback (404.html = built index.html)
+        run: cp dist/index.html dist/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -19,7 +19,7 @@ async function bootstrap() {
 
   if (import.meta.env.PROD && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').catch(() => {
+      navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
         /* 忽略 SW 注册失败 */
       });
     });

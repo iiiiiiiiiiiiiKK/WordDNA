@@ -34,7 +34,9 @@ export function applyTheme(resolved: 'light' | 'dark'): void {
 function syncSystemChrome(resolved: 'light' | 'dark'): void {
   const link = document.getElementById('app-manifest') as HTMLLinkElement | null;
   if (link) {
-    const href = resolved === 'dark' ? '/manifest-dark.webmanifest' : '/manifest.webmanifest';
+    const href = resolved === 'dark'
+      ? `${import.meta.env.BASE_URL}manifest-dark.webmanifest`
+      : `${import.meta.env.BASE_URL}manifest.webmanifest`;
     if (link.getAttribute('href') !== href) link.setAttribute('href', href);
   }
 }
