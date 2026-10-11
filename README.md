@@ -161,6 +161,8 @@ npm run typecheck
 数据构建脚本在 `scripts/`（`buildEcdict.mjs` / `buildVocab.mjs` / `checkDups.mjs`），
 原始数据体量过大（100MB+）不入库，构建产物已内联到 `src/data/`。
 
+> **数据质量**：已清洗 **583 条指向不存在词根的孤儿引用**（`word.rootIds`，如 `asocial→r-social`、`abnormal→r-normal`），词族 / 薄弱词根 / 每日计划不再被幽灵词根污染；并为词根、词缀打上 `verificationStatus`（`verified` / `review`），供后续人工核验。校验脚本见 `tools/diag-orphans.ts`。
+
 ---
 
 ## 🏗 技术架构
@@ -230,7 +232,7 @@ WordDNA/
 - [x] 主动回忆多方向（识别 / 反向回忆 / 词缀 / 语境 / 辨析）+ 词义辨析
 - [x] 学习数据导出 / 导入（本地 JSON 备份）
 - [x] 每日计划引导式会话（理解 → 拆解 → 回忆 → 评分，复用 buildDailyQueue / buildQuiz）
-- [ ] 词根 / 词缀数据校验清洗（583 孤儿 rootId、词缀真实性核验）
+- [x] 词根 / 词缀数据校验清洗（剔除 583 孤儿 rootId + verificationStatus 字段）
 - [ ] 拼写/听写题型（当前已有选择题、回忆题）
 - [ ] 自定义词单导入
 - [ ] 跨设备同步
