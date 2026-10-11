@@ -15,7 +15,9 @@ function useOverallMasteryPct(): number {
 export function Sidebar() {
   const pct = useOverallMasteryPct();
   return (
-    <aside className="hidden xl:flex w-64 shrink-0 flex-col border-r border-border bg-surface px-4 py-6">
+    // 用 lg（1024）而非 xl（1440）：桌面壳从 1280 开始渲染，若侧栏仍要 1440 才显示，
+    // 1280–1439 这一段会「没有顶栏也没有底栏还没有侧栏」＝彻底失去导航。
+    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-surface px-4 py-6">
       <div className="flex items-center gap-2 px-2 mb-8">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-root text-white font-bold">W</div>
         <div className="leading-tight">

@@ -14,7 +14,9 @@ export function RightRail() {
   const rootCount = getRoots().length;
 
   return (
-    <aside className="hidden xl:flex w-72 shrink-0 flex-col gap-4 border-l border-border bg-bg px-5 py-8 overflow-y-auto">
+    // 只在真正宽的屏（2xl = 1536px+）才出现：1280–1535 这一档留给正文，
+    // 否则「侧栏 256 + 右栏 288」会把正文压到 670px，中等桌面反而更挤。
+    <aside className="hidden 2xl:flex w-72 shrink-0 flex-col gap-4 border-l border-border bg-bg px-5 py-8 overflow-y-auto">
       <div className="flex items-center gap-3 rounded-2xl bg-surface border border-border p-4">
         <ProgressRing value={pct / 100} size={56} stroke={5} label={`${pct}%`} />
         <div>

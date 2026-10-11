@@ -3,11 +3,14 @@ export default {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
+    // ⚠️ 这是覆盖（不是 extend）：本项目没有 Tailwind 默认的 2xl。
+    // 注意 xl = 1440px（不是默认的 1280），所以 `xl:` 只在很宽的屏才生效。
     screens: {
       sm: '640px',
       md: '768px',
       lg: '1024px',
       xl: '1440px',
+      '2xl': '1536px',
     },
     extend: {
       colors: {

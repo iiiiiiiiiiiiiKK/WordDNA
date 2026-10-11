@@ -96,9 +96,21 @@ body {
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   font-size: 15px;
   line-height: 1.55;
+
+  /* 桌面大屏阅读舒适度：宽屏上调大一档字号与行高。
+     移动端保留 15px/1.55 的紧凑密度（信息密度是这个产品的核心），
+     桌面 16px/1.65 更接近桌面阅读习惯，长时间看不费眼。 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+/* 桌面宽屏：字号 +1、行高放松，长时间阅读不费眼（阈值与 useLayoutMode 的 desktop 一致 = 1280） */
+@media (min-width: 1280px) {
+  body {
+    font-size: 16px;
+    line-height: 1.65;
+  }
 }
 
 #root {
